@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitFlow Pro // Plataforma Avançada de Versionamento</title>
+    <style>
+        /* --- VARIÁVEIS DE DESIGN DO SISTEMA --- */
+        :root {
+            --bg-deep: #030712;
+            --bg-surface: #0b0f19;
+            --bg-card: rgba(17, 24, 39, 0.7);
+            --border-subtle: rgba(255, 255, 255, 0.08);
+            --border-glow: rgba(59, 130, 246, 0.3);
+            
+            --text-pure: #ffffff;
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            
+            --brand-primary: #3b82f6;
+            --brand-gradient: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            --brand-success: #10b981;
+            --brand-success-hover: #059669;
+            
+            --radius-lg: 16px;
+            --radius-md: 8px;
+            --transition-smooth: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* --- RESET & SETUP REFINADO --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Inter, system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Efeito de Luz de Fundo (Glows de Design Moderno) */
+        body::before {
+            content: '';
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, rgba(0,0,0,0) 70%);
+            top: -150px;
+            left: -150px;
+            z-index: -1;
+        }
+
+        body::after {
+            content: '';
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.08) 0%, rgba(0,0,0,0) 70%);
+            top: 400px;
+            right: -100px;
+            z-index: -1;
+        }
+
+        a { text-decoration: none; color: inherit; }
+        button, .btn { font-weight: 600; letter-spacing: -0.2px; }
+
+        /* --- HEADER COM GLASSMORPHISM --- */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(3, 7, 18, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-subtle);
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1.25rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-pure);
+        }
+
+        .logo-icon {
+            background: var(--brand-gradient);
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-pure);
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        /* --- BOTÕES PREMIUM --- */
+        .btn {
+            padding: 0.65rem 1.25rem;
+            border-radius: var(--radius-md);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            border: none;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text-main);
+            border: 1px solid var(--border-subtle);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--text-muted);
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .btn-primary {
+            background: var(--brand-gradient);
+            color: var(--text-pure);
+            box-shadow: 0 4px 20px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(59, 130, 246, 0.5);
+        }
+
+        .btn-success {
+            background-color: var(--brand-success);
+            color: var(--text-pure);
+        }
+
+        .btn-success:hover {
+            background-color: var(--brand-success-hover);
+            transform: translateY(-2px);
+        }
+
+        /* --- HERO SECTION REESTRUTURADO --- */
+        .hero {
+            max-width: 1200px;
+            margin: 160px auto 80px auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .hero-content {
+            text-align: left;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -2px;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #ffffff 30%, #9ca3af 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-bottom: 2.5rem;
+            max-width: 540px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        /* Imagem de Destaque na Hero (Estilo Corporativo Tech) */
+        .hero-image-wrapper {
+            position: relative;
+            width: 100%;
+            height: 450px;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            border: 1px solid var(--border-subtle);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.6);
+        }
+
+        .hero-image-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(20%) brightness(85%);
+        }
+
+        /* --- VISUALIZADOR DE CÓDIGO INTERATIVO --- */
+        .code-showcase {
+            max-width: 1200px;
+            margin: 0 auto 100px auto;
+            padding: 0 2rem;
+        }
+
+        .terminal-window {
+            background: #080c14;
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255,255,255,0.05);
+            overflow: hidden;
+        }
+
+        .terminal-header {
+            background: #0d1321;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border-subtle);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .terminal-dots { display: flex; gap: 8px; }
+        .dot { width: 12px; height: 12px; border-radius: 50%; }
+        .dot.r { background: #ef4444; }
+        .dot.y { background: #f59e0b; }
+        .dot.g { background: #10b981; }
+
+        .terminal-tab {
+            font-family: monospace;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            background: var(--bg-deep);
+            padding: 4px 16px;
+            border-radius: 4px;
+            border: 1px solid var(--border-subtle);
+        }
+
+        .terminal-body {
+            padding: 2rem;
+            font-family: 'Fira Code', Consolas, Monaco, monospace;
+            font-size: 1rem;
+            color: #60a5fa;
+            overflow-x: auto;
+        }
+
+        .line { display: flex; margin-bottom: 0.6rem; }
+        .line .num { color: #374151; width: 30px; text-align: right; margin-right: 20px; user-select: none; }
+        .cmd { color: var(--text-pure); }
+        .output-success { color: #34d399; }
+        .output-dim { color: #4b5563; }
+
+        /* --- GRADE DE RECURSOS METICULOSA (GRID) --- */
+        .features-section {
+            max-width: 1200px;
+            margin: 0 auto 120px auto;
+            padding: 0 2rem;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            color: var(--text-pure);
+            margin-bottom: 1rem;
+        }
+
+        .section-title p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: 2.5rem;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: var(--transition-smooth);
+            position: relative;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--brand-primary);
+            box-shadow: 0 20px 40px rgba(59, 130, 246, 0.1);
+        }
+
+        /* Container de imagem embutida dentro dos cards para enriquecer o visual */
+        .card-img-context {
+            width: 100%;
+            height: 160px;
+            border-radius: var(--radius-md);
+            margin-bottom: 1.5rem;
+            object-fit: cover;
+            border: 1px solid var(--border-subtle);
+        }
+
+        .feature-card h3 {
+            font-size: 1.4rem;
+            color: var(--text-pure);
+            margin-bottom: 0.75rem;
+            font-weight: 700;
+        }
+
+        .feature-card p {
+            color: var(--text-muted);
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        /* --- FOOTER MODERNO --- */
+        footer {
+            border-top: 1px solid var(--border-subtle);
+            background: var(--bg-surface);
+            padding: 4px 0;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-text {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        /* --- DISPOSITIVOS MÓVEIS --- */
+        @media (max-width: 968px) {
+            .hero {
+                grid-template-columns: 1fr;
+                text-align: center;
+                margin-top: 120px;
+                gap: 2.5rem;
+            }
+            .hero-content { text-align: center; }
+            .hero h1 { font-size: 2.8rem; }
+            .hero p { margin: 0 auto 2.5rem auto; }
+            .hero-buttons { justify-content: center; }
+            .nav-links, .nav-buttons .btn-outline { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <div class="logo-icon">
+                    <svg height="18" viewBox="0 0 16 16" width="18" fill="#ffffff"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82A7.48 7.48 0 0 0 8 2.51c-.67.004-1.34.09-2 .25-1.52-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"></path></svg>
+                </div>
+                GitFlow
+            </a>
+            <ul class="nav-links">
+                <li><a href="#features">Funcionalidades</a></li>
+                <li><a href="#">Enterprise</a></li>
+                <li><a href="#">Segurança</a></li>
+                <li><a href="#">Preços</a></li>
+            </ul>
+            <div class="nav-buttons">
+                <button class="btn btn-outline">Entrar</button>
+                <button class="btn btn-primary">Criar conta</button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <h1>A plataforma de versionamento para a próxima década.</h1>
+                <p>Armazene códigos, faça a gestão de ramificações complexas de forma visual e colabore em tempo real com engenheiros do mundo inteiro.</p>
+                <div class="hero-buttons">
+                    <button class="btn btn-primary btn-success">Iniciar Projeto Grátis</button>
+                    <button class="btn btn-outline">Ver Demonstração</button>
+                </div>
+            </div>
+            <div class="hero-image-wrapper">
+                <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80" alt="Equipe de desenvolvedores trabalhando em conjunto">
+            </div>
+        </section>
+
+        <section class="code-showcase">
+            <div class="terminal-window">
+                <div class="terminal-header">
+                    <div class="terminal-dots">
+                        <div class="dot r"></div>
+                        <div class="dot y"></div>
+                        <div class="dot g"></div>
+                    </div>
+                    <div class="terminal-tab">main_workflow.sh</div>
+                </div>
+                <div class="terminal-body">
+                    <div class="line"><span class="num">1</span><span><span class="cmd">git</span> checkout -b feature/ui-perfeita</span></div>
+                    <div class="line"><span class="num">2</span><span class="output-dim">Switched to a new branch 'feature/ui-perfeita'</span></div>
+                    <div class="line"><span class="num">3</span><span><span class="cmd">git</span> add . && <span class="cmd">git</span> commit -m "style: aplicar CSS de alto nível"</span></div>
+                    <div class="line"><span class="num">4</span><span class="output-success">[feature/ui-perfeita e1a4d82] style: aplicar CSS de alto nível</span></div>
+                    <div class="line"><span class="num">5</span><span><span class="cmd">git</span> push origin feature/ui-perfeita</span></div>
+                    <div class="line"><span class="num">6</span><span class="output-success">✓ Everything up-to-date! Code synchronized with cloud.</span></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="features-section" id="features">
+            <div class="section-title">
+                <h2>Desenvolvido para times de alta performance</h2>
+                <p>Tudo o que você precisa para gerenciar o ciclo de vida do seu código-fonte.</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <img class="card-img-context" src="https://images.unsplash.com/photo-1618401471353-b98afee0b2eb?auto=format&fit=crop&w=500&q=80" alt="Abstrato linhas de código">
+                    <h3>Ramificação Isolada</h3>
+                    <p>O ecossistema de ramificações do GitFlow permite que múltiplos desenvolvedores criem fluxos paralelos sem gerar conflitos críticos na base master.</p>
+                </div>
+                <div class="feature-card">
+                    <img class="card-img-context" src="https://images.unsplash.com/photo-1607799279861-4dd421887fb3?auto=format&fit=crop&w=500&q=80" alt="Análise de dados telas">
+                    <h3>Revisão de Código Inteligente</h3>
+                    <p>Interface rica para Pull Requests que destaca as adições de linhas de código, facilitando o feedback visual e a aprovação por administradores.</p>
+                </div>
+                <div class="feature-card">
+                    <img class="card-img-context" src="https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=500&q=80" alt="Segurança cibernética abstrato">
+                    <h3>Garantia de Compliance</h3>
+                    <p>Trave branches principais para que builds quebrados nunca cheguem ao servidor de produção. Segurança rigorosa integrada de ponta a ponta.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-text">
+                &copy; 2026 GitFlow Enterprise Inc. Projetado rigorosamente para fins acadêmicos.
+            </div>
+            <div class="footer-text" style="color: var(--brand-primary); font-weight: 500;">
+                UI/UX Premium Ativo
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
